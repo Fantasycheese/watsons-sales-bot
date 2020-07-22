@@ -1,10 +1,15 @@
 import json
 
-from flask import Flask, request
+from flask import Flask, request, render_template
 import requests
 from requests.auth import HTTPBasicAuth
 
 app = Flask(__name__)
+
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 
 @app.route('/dialogflow', methods=['POST'])
@@ -24,19 +29,26 @@ def search():
     names = [r['_source']['name'] for r in results]
 
     return json.dumps({
-      "fulfillmentMessages": [
-        {
-          "card": {
-            "title": "Products",
-            "subtitle": "\n".join(names),
-            "imageUri": "https://example.com/images/example.png",
-            "buttons": [
-              {
-                "text": "button text",
-                "postback": "https://example.com/path/for/end-user/to/follow"
-              }
-            ]
-          }
-        }
-      ]
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [
+                        names
+                    ]
+                }
+            }
+            # {
+            #   "card": {
+            #     "title": "Products",
+            #     "subtitle": "\n".join(names),
+            #     "imageUri": "https://example.com/images/example.png",
+            #     "buttons": [
+            #       {
+            #         "text": "button text",
+            #         "postback": "https://example.com/path/for/end-user/to/follow"
+            #       }
+            #     ]
+            #   }
+            # }
+        ]
     })
