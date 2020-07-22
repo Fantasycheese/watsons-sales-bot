@@ -33,7 +33,7 @@ def search():
             {
                 "text": {
                     "text": [
-                        names
+                        '\n'.join(names)
                     ]
                 }
             }
